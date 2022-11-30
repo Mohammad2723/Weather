@@ -19,7 +19,7 @@ fun MyColors(dark: Boolean = isSystemInDarkTheme()): WeatherColor {
     } else {
         WeatherColor(
             background = lightBackground,
-            primary = lightBackground,
+            primary = lightPrimary,
             text = lightText,
             onBackground = lightOnBackground
         )
