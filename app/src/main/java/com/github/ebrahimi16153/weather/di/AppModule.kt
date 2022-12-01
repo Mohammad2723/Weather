@@ -18,8 +18,10 @@ interface AppModule {
     @Provides
     @Singleton
     fun provideOpenWeatherApi(): WeatherApi {
-        return Retrofit.Builder().baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create()).build()
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
             .create(WeatherApi::class.java)
     }
 
