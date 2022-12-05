@@ -1,5 +1,6 @@
 package com.github.ebrahimi16153.weather.repository
 
+import android.util.Log
 import com.github.ebrahimi16153.weather.data.DataOrException
 import com.github.ebrahimi16153.weather.model.Weather
 import com.github.ebrahimi16153.weather.model.WeatherObject
@@ -14,8 +15,10 @@ class WeatherRepository @Inject constructor(private val api: WeatherApi) {
         val response = try {
             api.getWhether(query = cityQuery)
         } catch (e: Exception) {
+            Log.d("ERROR","getWeather $e")
             return DataOrException(exception = e)
         }
+        Log.d("RESPONSE","getWeather $response")
         return DataOrException(data = response)
     }
 

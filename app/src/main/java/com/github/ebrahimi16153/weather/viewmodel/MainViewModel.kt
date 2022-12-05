@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.ebrahimi16153.weather.data.DataOrException
+import com.github.ebrahimi16153.weather.model.City
 import com.github.ebrahimi16153.weather.model.Weather
 import com.github.ebrahimi16153.weather.model.WeatherObject
 import com.github.ebrahimi16153.weather.repository.WeatherRepository
@@ -17,41 +18,9 @@ import javax.inject.Inject
 public class MainViewModel @Inject constructor(private val repository: WeatherRepository) :
     ViewModel() {
 
-
-    val data: MutableState<DataOrException<Weather, Boolean, Exception>>
-    = mutableStateOf(DataOrException(null,true,Exception("")))
-
-
-
-    init {
-        loadWeather()
-
-    }
-
-    private fun loadWeather() {
-        getWeather("seattle")
-    }
-
-    private fun getWeather(city: String) {
-
-        viewModelScope.launch {
-            if (city.isEmpty()){
-                return@launch
-            }else{
-                data.value.isLoading = true
-                data.value = repository.getWeather(cityQuery = city)
-            }
-
-            if (data.value.data.toString().isNotEmpty()){
-                data.value.isLoading = false
-            }
-            Log.d("TAG","getWeather: ${data.value.data.toString()}")
-
-
+        suspend fun getWeatherData(city:String):DataOrException<Weather,Boolean,Exception>{
+            return repository.getWeather(cityQuery = city)
         }
 
-
-
-    }
 
 }
