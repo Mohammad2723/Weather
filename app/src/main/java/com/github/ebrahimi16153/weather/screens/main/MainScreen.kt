@@ -2,6 +2,8 @@ package com.github.ebrahimi16153.weather.screens.main
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
@@ -14,10 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.github.ebrahimi16153.weather.data.DataOrException
 import com.github.ebrahimi16153.weather.model.Weather
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
@@ -75,26 +80,69 @@ fun MainScaffold(weather:Weather ,navController: NavController) {
 
 @Composable
 fun MainContent(weather: Weather) {
+    // icon Url
+    val iconUrl = "https://openweathermap.org/img/wn/${weather.list?.get(0)?.weather?.get(0)?.icon}.png"
+    // Main Column
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MyColors().background)
+            .padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Mon March 21", color = MyColors().onPrimary)
+        Text(text = "Mon March 21", color = MyColors().text)
+
+        //Start Circle content
         Surface(
             modifier = Modifier
                 .size(200.dp)
-                .padding(4.dp), shape = CircleShape, color = MyColors().primary
+                .padding(5.dp), shape = CircleShape, color = MyColors().primary
         ) {
             Column(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-               Text(text = weather.list?.last()?.deg.toString())
+                // icon of clouds
+                WeatherIcon(url = iconUrl)
+               
+                Log.d("Url",iconUrl)
+
+                // Temp
+                Text(
+                    text = weather.list?.get(0)?.temp?.day.toString() + "°",
+                    color = MyColors().onPrimary,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 35.sp
+                )
+                // Clouds
+                weather.list?.get(0)?.weather?.get(0)?.description?.let {
+                    Text(
+                        text = it,
+                        color = MyColors().onPrimary,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+
             }
         }
+        //end circle Content
 
     }
 
+
+}
+
+@Composable
+fun WeatherIcon(url: String) {
+
+    Image(
+        painter = rememberImagePainter(url),
+        contentDescription = "icon",
+        modifier = Modifier.size(70.dp)
+    )
 
 }
