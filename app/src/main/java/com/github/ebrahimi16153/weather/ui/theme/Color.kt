@@ -14,6 +14,7 @@ val lightBackground = Color(0xFFDADEFF)
 val lightText = Color(0xFF444655)
 val lightOnBackground = Color(0xFFE9BBBE)
 val lightPrimary = Color(0xFF007AFF)
+val lightOnPrimary = Color(0xEFEFEFEF)
 
 
 
@@ -23,4 +24,6 @@ val darkBackground = Color(0xFF444655)
 val darkText = Color(0XFFDADEFF)
 val darkOnBackground = Color(0xFFA8AABC)
 val darkPrimary = Color(0xFF007AFF)
+val darkOnPrimary = Color(0xEFEFEFEF)
+
 

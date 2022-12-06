@@ -1,14 +1,17 @@
 package com.github.ebrahimi16153.weather.widgets
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
 
@@ -23,10 +26,42 @@ fun WeatherAppBar(
 ) {
 
 
-    TopAppBar(backgroundColor = MyColors().background) {
-        Text(text = title, color = MyColors().text,
-            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 15.sp))
+    TopAppBar(
+        title = { Text(text = title, color = MyColors().onPrimary) },
+        actions = {
+            //search button
+            if (isMainScreen) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search icon",
+                        tint = MyColors().onPrimary
+                    )
 
-    }
+                }
+                //more button
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "Search icon",
+                        tint = MyColors().onPrimary
+                    )
+
+                }
+            } else {
+                Box {}
+            }
+
+        },
+        navigationIcon = {
+            if (icon != null) {
+                IconButton( onClick = {onAddActionClicked.invoke()}) {
+                 Icon(imageVector = icon, contentDescription = "null" , tint = MyColors().onPrimary)
+                }
+            }
+        },
+        backgroundColor = MyColors().primary,
+        elevation = elevation
+    )
 
 }

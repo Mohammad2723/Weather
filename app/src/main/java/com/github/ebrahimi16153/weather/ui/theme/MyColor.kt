@@ -14,14 +14,17 @@ fun MyColors(dark: Boolean = isSystemInDarkTheme()): WeatherColor {
             background = darkBackground,
             primary = darkPrimary,
             text = darkText,
-            onBackground = darkOnBackground
+            onBackground = darkOnBackground,
+            onPrimary = darkOnPrimary
         )
     } else {
         WeatherColor(
             background = lightBackground,
             primary = lightPrimary,
             text = lightText,
-            onBackground = lightOnBackground
+            onBackground = lightOnBackground,
+            lightOnPrimary
+
         )
     }
 }
