@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.github.ebrahimi16153.weather.R
 import com.github.ebrahimi16153.weather.data.DataOrException
 import com.github.ebrahimi16153.weather.model.Weather
 import com.github.ebrahimi16153.weather.navigation.WeatherScreensName
@@ -50,6 +52,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel = hilt
         } else if (weatherData.data != null) {
 
             MainScaffold(weather = weatherData.data!!, navController = navController)
+            HumidityWindPressureRow(weather = weatherData.data!!)
         } else {
             Text(text = "We can't find the city")
             TryAgain {
@@ -57,6 +60,8 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel = hilt
                 navController.navigate(WeatherScreensName.MainScreen.name)
             }
         }
+
+
     }
 }
 
@@ -82,6 +87,7 @@ fun MainScaffold(weather:Weather ,navController: NavController) {
         MainContent(weather = weather)
     }
 
+
 }
 
 @Composable
@@ -95,7 +101,7 @@ fun MainContent(weather: Weather) {
         modifier = Modifier
             .fillMaxWidth()
             .background(MyColors().background)
-            .padding(20.dp),
+            .padding(all = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -150,6 +156,7 @@ fun MainContent(weather: Weather) {
         }
         //end circle Content
 
+        HumidityWindPressureRow(weather = weather)
     }
 
 
@@ -172,6 +179,61 @@ fun WeatherIcon(url: String) {
 fun TryAgain(onClick: () -> Unit) {
     Button(onClick = onClick) {
         Text(text = "TryAgain")
+    }
+
+}
+
+@Composable
+fun HumidityWindPressureRow(weather: Weather) {
+    Row(
+        modifier = Modifier
+            .padding(12.dp)
+            .fillMaxWidth()
+            .background(MyColors().background),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // humidity
+        Row(
+            modifier = Modifier.padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.humidity),
+                contentDescription = "humidity",
+                modifier = Modifier.size(20.dp)
+            )
+            Text(text = weather.list?.get(0)?.humidity.toString() + "%" , style = MaterialTheme.typography.caption)
+        }
+        //wind
+        Row(
+            modifier = Modifier.padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.wind),
+                contentDescription = "wind",
+                modifier = Modifier.size(20.dp)
+            )
+            Text(text = weather.list?.get(0)?.speed.toString() + "mph",style = MaterialTheme.typography.caption)
+        }
+        //pressure
+        Row(
+            modifier = Modifier.padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.pressure),
+                contentDescription = "pressure",
+                modifier = Modifier.size(20.dp)
+            )
+            Text(text = weather.list?.get(0)?.pressure.toString() + " psi",style = MaterialTheme.typography.caption)
+        }
+
+
     }
 
 }
