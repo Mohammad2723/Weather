@@ -14,6 +14,14 @@ import java.text.SimpleDateFormat
         return sdf.format(date)
     }
 
+  @SuppressLint("SimpleDateFormat")
+  fun formatDays(timestamp: Int): String {
+    val sdf = SimpleDateFormat("EEE")
+    val date = java.util.Date(timestamp.toLong() * 1000)
+
+    return sdf.format(date)
+}
+
     @SuppressLint("SimpleDateFormat")
     fun formatDateTime(timestamp: Int): String {
         val sdf = SimpleDateFormat("hh:mm aa")

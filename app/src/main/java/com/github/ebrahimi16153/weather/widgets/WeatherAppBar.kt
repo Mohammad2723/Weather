@@ -27,7 +27,7 @@ fun WeatherAppBar(
 
 
     TopAppBar(
-        title = { Text(text = title, color = MyColors().onPrimary) },
+        title = { Text(text = title, color = MyColors().onPrimary.value) },
         actions = {
             //search button
             if (isMainScreen) {
@@ -35,7 +35,7 @@ fun WeatherAppBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search icon",
-                        tint = MyColors().onPrimary
+                        tint = MyColors().onPrimary.value
                     )
 
                 }
@@ -44,7 +44,7 @@ fun WeatherAppBar(
                     Icon(
                         imageVector = Icons.Default.MoreVert,
                         contentDescription = "Search icon",
-                        tint = MyColors().onPrimary
+                        tint = MyColors().onPrimary.value
                     )
 
                 }
@@ -56,11 +56,11 @@ fun WeatherAppBar(
         navigationIcon = {
             if (icon != null) {
                 IconButton( onClick = {onAddActionClicked.invoke()}) {
-                 Icon(imageVector = icon, contentDescription = "null" , tint = MyColors().onPrimary)
+                 Icon(imageVector = icon, contentDescription = "null" , tint = MyColors().onPrimary.value)
                 }
             }
         },
-        backgroundColor = MyColors().primary,
+        backgroundColor = MyColors().primary.value,
         elevation = elevation
     )
 

@@ -60,7 +60,7 @@ fun SplashScreen(navController: NavController) {
                 .scale(scale.value),
             color = Color.Transparent,
             shape = CircleShape,
-            border = BorderStroke(width = 2.dp, color = MyColors().text)
+            border = BorderStroke(width = 2.dp, color = MyColors().text.value)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,9 +70,9 @@ fun SplashScreen(navController: NavController) {
                 Icon(
                     painter = painterResource(id = R.drawable.sun),
                     contentDescription = "",
-                    tint = MyColors().text
+                    tint = MyColors().text.value
                 )
-                Text(text = "Find the Sun?", color = MyColors().text)
+                Text(text = "Find the Sun?", color = MyColors().text.value)
             }
 
 

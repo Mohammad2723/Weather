@@ -2,11 +2,8 @@ package com.github.ebrahimi16153.weather.screens.main
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,17 +19,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
-import com.github.ebrahimi16153.weather.R
 import com.github.ebrahimi16153.weather.data.DataOrException
 import com.github.ebrahimi16153.weather.model.Weather
-import com.github.ebrahimi16153.weather.model.WeatherItem
 import com.github.ebrahimi16153.weather.navigation.WeatherScreensName
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
 import com.github.ebrahimi16153.weather.util.formatDate
-import com.github.ebrahimi16153.weather.util.formatDateTime
 import com.github.ebrahimi16153.weather.viewmodel.MainViewModel
-import com.github.ebrahimi16153.weather.widgets.WeatherAppBar
+import com.github.ebrahimi16153.weather.widgets.*
 
 
 @Composable
@@ -51,7 +43,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel = hilt
         }.value
 
         if (weatherData.isLoading == true) {
-            CircularProgressIndicator(color = MyColors().text)
+            CircularProgressIndicator(color = MyColors().text.value)
 
         } else if (weatherData.data != null) {
 
@@ -104,7 +96,7 @@ fun MainContent(weather: Weather) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MyColors().background)
+            .background(MyColors().background.value)
             .padding(all = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -113,7 +105,7 @@ fun MainContent(weather: Weather) {
         // Top Date
         Text(
             text = "${weather.list?.get(0)?.dt?.let { formatDate(it) }}",
-            color = MyColors().text,
+            color = MyColors().text.value,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             modifier = Modifier.padding(bottom = 10.dp)
@@ -123,7 +115,7 @@ fun MainContent(weather: Weather) {
         Surface(
             modifier = Modifier
                 .size(230.dp),
-            shape = CircleShape, color = MyColors().primary
+            shape = CircleShape, color = MyColors().primary.value
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -139,16 +131,16 @@ fun MainContent(weather: Weather) {
                 // Temp
                 Text(
                     text = weather.list?.get(0)?.temp?.day?.toInt().toString() + "°",
-                    color = MyColors().onPrimary,
+                    color = MyColors().onPrimary.value,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 35.sp
+                    fontSize = 45.sp
                 )
 
                 // Clouds
                 weather.list?.get(0)?.weather?.get(0)?.description?.let {
                     Text(
                         text = it,
-                        color = MyColors().onPrimary,
+                        color = MyColors().onPrimary.value,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         fontStyle = FontStyle.Italic
@@ -170,178 +162,5 @@ fun MainContent(weather: Weather) {
 
 }
 
-@Composable
-fun WeatherIcon(url: String) {
 
-    Image(
-        // coil rememberImagePainter
-        painter = rememberImagePainter(url),
-        contentDescription = "icon",
-        modifier = Modifier.size(50.dp)
-    )
-
-}
-
-
-@Composable
-fun TryAgain(onClick: () -> Unit) {
-    Button(onClick = onClick) {
-        Text(text = "TryAgain")
-    }
-
-}
-
-@Composable
-fun HumidityWindPressureRow(weather: Weather) {
-    Row(
-        modifier = Modifier
-            .padding(12.dp)
-            .fillMaxWidth()
-            .background(MyColors().background),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        // humidity
-        Row(
-            modifier = Modifier.padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.humidity),
-                contentDescription = "humidity",
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = weather.list?.get(0)?.humidity.toString() + "%",
-                style = MaterialTheme.typography.caption
-            )
-        }
-        //pressure
-        Row(
-            modifier = Modifier.padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.pressure),
-                contentDescription = "pressure",
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = weather.list?.get(0)?.pressure.toString() + " psi",
-                style = MaterialTheme.typography.caption
-            )
-        }
-        //wind
-        Row(
-            modifier = Modifier.padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.wind),
-                contentDescription = "wind",
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-            Text(
-                text = weather.list?.get(0)?.speed.toString() + " k/h",
-                style = MaterialTheme.typography.caption
-            )
-        }
-
-
-    }
-
-}
-
-@Composable
-fun SunRiseSunSet(weather: Weather) {
-    Row(
-        modifier = Modifier
-            .padding(12.dp)
-            .fillMaxWidth()
-            .background(MyColors().background),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        // sunrise
-        Row(
-            modifier = Modifier.padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.sunrise),
-                contentDescription = "sunrise",
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = "${weather.list?.get(0)?.sunrise?.let { formatDateTime(it) }}",
-                style = MaterialTheme.typography.caption
-            )
-        }
-
-        //sunset
-        Row(
-            modifier = Modifier.padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.sunset),
-                contentDescription = "sunset",
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = "${weather.list?.get(0)?.sunset?.let { formatDateTime(it) }}",
-                style = MaterialTheme.typography.caption
-            )
-        }
-
-
-    }
-
-}
-
-@Composable
-fun DivideLine() {
-
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp),
-        color = MyColors().text
-    ) {}
-
-
-}
-
-@Composable
-fun ThisWeek(weather: Weather) {
-
-    LazyColumn {
-
-        weather.list?.let {
-            items(items = it) { weatherItem ->
-              RowOfThisWeek(item = weatherItem)
-            }
-        }
-
-    }
-
-
-}
-
-@Composable
-fun RowOfThisWeek(item: WeatherItem) {
-    Surface(
-        modifier = Modifier
-            .padding(5.dp)
-            .fillMaxWidth()
-    ) {
-          Text(text = "${item.dt?.let { formatDate(it) }}")
-    }
-}
 
