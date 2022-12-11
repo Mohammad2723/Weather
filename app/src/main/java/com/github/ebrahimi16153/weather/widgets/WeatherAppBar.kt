@@ -21,8 +21,9 @@ fun WeatherAppBar(
     icon: ImageVector? = null,
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
+    onSearchClicked: () -> Unit,
     navController: NavController,
-    onAddActionClicked: () -> Unit = {}
+    onNavigationClicked: () -> Unit = {}
 ) {
 
 
@@ -31,7 +32,7 @@ fun WeatherAppBar(
         actions = {
             //search button
             if (isMainScreen) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onSearchClicked.invoke() }) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search icon",
@@ -55,7 +56,7 @@ fun WeatherAppBar(
         },
         navigationIcon = {
             if (icon != null) {
-                IconButton( onClick = {onAddActionClicked.invoke()}) {
+                IconButton( onClick = {onNavigationClicked.invoke()}) {
                  Icon(imageVector = icon, contentDescription = "null" , tint = MyColors().onPrimary.value)
                 }
             }

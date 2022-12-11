@@ -1,14 +1,16 @@
 package com.github.ebrahimi16153.weather.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.github.ebrahimi16153.weather.screens.SplashScreen
 import com.github.ebrahimi16153.weather.screens.main.MainScreen
+import com.github.ebrahimi16153.weather.screens.searchscreen.SearchScreen
 import com.github.ebrahimi16153.weather.viewmodel.MainViewModel
-
+@ExperimentalComposeUiApi
 @Composable
 fun WeatherNavigation() {
     val navController = rememberNavController()
@@ -24,6 +26,10 @@ fun WeatherNavigation() {
         composable(WeatherScreensName.MainScreen.name) {
             val mainViewModel = hiltViewModel<MainViewModel>()
             MainScreen(navController = navController , mainViewModel)
+        }
+
+        composable(WeatherScreensName.SearchScreen.name){
+            SearchScreen(navController = navController)
         }
 
 
