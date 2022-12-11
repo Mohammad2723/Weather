@@ -71,7 +71,7 @@ fun MainScaffold(weather:Weather ,navController: NavController) {
         WeatherAppBar(
             title = "${weather.city?.name},${weather.city?.country}",
             navController = navController,
-            icon = Icons.Default.ArrowBack,
+            onSearchClicked = { navController.navigate(WeatherScreensName.SearchScreen.name)},
             elevation = 5.dp
         ) {
             Log.d("ArrowBack", "Arrow Back clicked")
