@@ -6,11 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,18 +27,26 @@ import com.github.ebrahimi16153.weather.viewmodel.MainViewModel
 import com.github.ebrahimi16153.weather.widgets.*
 
 
+@ExperimentalComposeUiApi
 @Composable
-fun MainScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()) {
+fun MainScreen(
+    navController: NavHostController,
+    viewModel: MainViewModel = hiltViewModel(),
+    city: String?
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
+
+//        Log.d("city", city!!)
+
         val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
             initialValue = DataOrException(isLoading = true)
         ) {
-            value = viewModel.getWeatherData(city = "hashtgerd")
+            value = viewModel.getWeatherData(city = city?:"London")
         }.value
 
         if (weatherData.isLoading == true) {
@@ -51,10 +58,8 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel = hilt
             HumidityWindPressureRow(weather = weatherData.data!!)
         } else {
             Text(text = "We can't find the city")
-            TryAgain {
-                navController.popBackStack()
-                navController.navigate(WeatherScreensName.MainScreen.name)
-            }
+            SearchContent(navController = navController)
+
         }
 
 
@@ -74,7 +79,7 @@ fun MainScaffold(weather:Weather ,navController: NavController) {
             onSearchClicked = { navController.navigate(WeatherScreensName.SearchScreen.name)},
             elevation = 5.dp
         ) {
-            Log.d("ArrowBack", "Arrow Back clicked")
+//            Log.d("ArrowBack", "Arrow Back clicked")
         }
     }) {
 

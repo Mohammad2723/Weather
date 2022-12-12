@@ -42,7 +42,7 @@ fun SplashScreen(navController: NavController) {
 
         delay(800)
         navController.popBackStack()
-        navController.navigate(WeatherScreensName.MainScreen.name)
+        navController.navigate(WeatherScreensName.MainScreen.name+"/London")
 
     })
    // end animation
