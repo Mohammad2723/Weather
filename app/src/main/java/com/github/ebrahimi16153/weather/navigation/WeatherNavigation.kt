@@ -22,11 +22,12 @@ fun WeatherNavigation() {
         startDestination = WeatherScreensName.SplashScreen.name
     ) {
 
+        //splash screen
         composable(WeatherScreensName.SplashScreen.name) {
             SplashScreen(navController = navController)
         }
         // Main Screen
-        //www.google.com/cityname="seattle"
+        //www.google.com/city-name="seattle"
 
         val route = WeatherScreensName.MainScreen.name
 
