@@ -34,15 +34,6 @@ fun WeatherIcon(url: String) {
 
 }
 
-
-@Composable
-fun TryAgain(onClick: () -> Unit) {
-    Button(onClick = onClick) {
-        Text(text = "TryAgain")
-    }
-
-}
-
 @Composable
 fun HumidityWindPressureRow(weather: Weather) {
     Row(
@@ -180,10 +171,7 @@ fun ThisWeek(weather: Weather) {
                 RowOfThisWeek(item = weatherItem)
             }
         }
-
     }
-
-
 }
 
 
@@ -196,7 +184,7 @@ fun RowOfThisWeek(item: WeatherItem) {
             .padding(4.dp)
             .height(50.dp),
         shape = RoundedCornerShape(8.dp),
-        color = MyColors().primary.value
+        color = MyColors().background.value
     ) {
 
         Row(
@@ -210,7 +198,7 @@ fun RowOfThisWeek(item: WeatherItem) {
             // days of week
             Text(
                 text = "${item.dt?.let { formatDays(it) }}",
-                color = MyColors().onPrimary.value,
+                color = MyColors().text.value,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -225,7 +213,7 @@ fun RowOfThisWeek(item: WeatherItem) {
             // description of days
             Text(
                 text = "${item.weather?.get(0)?.description}",
-                color = MyColors().onPrimary.value,
+                color = MyColors().text.value,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -234,19 +222,17 @@ fun RowOfThisWeek(item: WeatherItem) {
             Row {
                 Text(
                     text = "${item.temp?.max?.toInt()}" + "°",
-                    color = MyColors().onPrimary.value,
+                    color = MyColors().text.value,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = "| ${item.temp?.min?.toInt()}" + "°",
-                    color = MyColors().onPrimary.value,
+                    color = MyColors().text.value,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
-
-
             }
         }
 

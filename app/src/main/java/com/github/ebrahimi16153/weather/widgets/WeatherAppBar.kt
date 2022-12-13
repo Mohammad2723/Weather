@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.github.ebrahimi16153.weather.navigation.WeatherScreensName
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
 
 //val showDialog = mutableStateOf(false)
@@ -24,7 +26,8 @@ fun WeatherAppBar(
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
     onSearchClicked: () -> Unit,
-    onNavigationClicked: () -> Unit = {}
+    navController:NavController,
+    onNavigationClicked: () -> Unit = { navController.popBackStack()}
 ) {
 
     val showDialog = remember {
@@ -32,7 +35,7 @@ fun WeatherAppBar(
     }
 
     if (showDialog.value) {
-        ShowSettingDropDownMenu(showDialog = showDialog)
+        ShowSettingDropDownMenu(showDialog = showDialog , navController = navController)
     }
 
 
@@ -81,7 +84,7 @@ fun WeatherAppBar(
 }
 
 @Composable
-fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>) {
+fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean> , navController: NavController) {
     var isExpanded by remember { mutableStateOf(true) }
     val items = listOf("About", "Favorites", "Settings")
 
@@ -114,6 +117,13 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>) {
                         .clickable {
                             isExpanded = false
                             showDialog.value = false
+
+                            navController.navigate(when(text){
+                                "Favorites" -> WeatherScreensName.FavoritesScreen.name
+                                "Settings" -> WeatherScreensName.SettingsScreen.name
+                                else -> WeatherScreensName.AboutScreen.name
+                            })
+
                         }) {
                         Icon(
                             imageVector = when (text) {

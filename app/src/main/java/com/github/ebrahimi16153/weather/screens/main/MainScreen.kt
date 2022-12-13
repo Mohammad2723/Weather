@@ -55,7 +55,7 @@ fun MainScreen(
         } else if (weatherData.data != null) {
 
             MainScaffold(weather = weatherData.data!!, navController = navController)
-            HumidityWindPressureRow(weather = weatherData.data!!)
+//            HumidityWindPressureRow(weather = weatherData.data!!)
         } else {
             Text(text = "We can't find the city")
             SearchContent(navController = navController)
@@ -76,7 +76,8 @@ fun MainScaffold(weather:Weather ,navController: NavController) {
         WeatherAppBar(
             title = "${weather.city?.name},${weather.city?.country}",
             onSearchClicked = { navController.navigate(WeatherScreensName.SearchScreen.name)},
-            elevation = 5.dp
+            elevation = 5.dp,
+            navController = navController
         ) {
 //            Log.d("ArrowBack", "Arrow Back clicked")
         }

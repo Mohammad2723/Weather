@@ -29,8 +29,8 @@ fun SearchScaffold(navController: NavController) {
             title = "Search",
             onSearchClicked = {},
             icon = Icons.Default.ArrowBack,
-            onNavigationClicked = { navController.popBackStack() }
-        )
+            onNavigationClicked = { navController.popBackStack() },
+        navController = navController)
     }) {
 
         SearchContent(navController = navController)
