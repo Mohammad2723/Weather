@@ -75,7 +75,6 @@ fun MainScaffold(weather:Weather ,navController: NavController) {
     Scaffold(topBar = {
         WeatherAppBar(
             title = "${weather.city?.name},${weather.city?.country}",
-            navController = navController,
             onSearchClicked = { navController.navigate(WeatherScreensName.SearchScreen.name)},
             elevation = 5.dp
         ) {

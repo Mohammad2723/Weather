@@ -27,7 +27,6 @@ fun SearchScaffold(navController: NavController) {
     Scaffold(topBar = {
         WeatherAppBar(
             title = "Search",
-            navController = navController,
             onSearchClicked = {},
             icon = Icons.Default.ArrowBack,
             onNavigationClicked = { navController.popBackStack() }
