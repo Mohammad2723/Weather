@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.github.ebrahimi16153.weather.model.Favorites
 import kotlinx.coroutines.flow.Flow
+import retrofit2.http.DELETE
 
 
 @Dao
@@ -27,6 +28,10 @@ interface WeatherDao {
 
 
     @Query("DELETE FROM fav_tbl")
+    suspend fun deleteAllFavorite()
+
+
+    @DELETE
     suspend fun deleteFavorite(favorites: Favorites)
 
 }
