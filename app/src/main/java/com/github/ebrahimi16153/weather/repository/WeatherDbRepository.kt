@@ -10,7 +10,7 @@ class WeatherDbRepository @Inject constructor( private val weatherDao: WeatherDa
 
      fun getFavorites(): Flow<List<Favorites>> = weatherDao.getFavorites()
 
-    suspend fun getFavById(city:String):Favorites = weatherDao.getFavById(city)
+
     suspend fun insertFavorite(favorites: Favorites) = weatherDao.insertFavorite(favorites)
     suspend fun updateFavorite(favorites: Favorites) = weatherDao.updateFavorite(favorites)
     suspend fun deleteAllFavorite() = weatherDao.deleteAllFavorite()

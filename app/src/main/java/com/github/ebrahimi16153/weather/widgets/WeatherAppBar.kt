@@ -13,9 +13,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.github.ebrahimi16153.weather.navigation.WeatherScreensName
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
+import com.github.ebrahimi16153.weather.viewmodel.FavoriteViewModel
 
 //val showDialog = mutableStateOf(false)
 
@@ -25,8 +27,10 @@ fun WeatherAppBar(
     icon: ImageVector? = null,
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
+    favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onSearchClicked: () -> Unit,
     navController:NavController,
+
     onNavigationClicked: () -> Unit = { navController.popBackStack()}
 ) {
 
@@ -75,6 +79,17 @@ fun WeatherAppBar(
                         tint = MyColors().onPrimary.value
                     )
                 }
+            } else if (isMainScreen) {
+
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = "fav icon",
+                        tint = MyColors().onPrimary.value
+                    )
+                }
+
+
             }
         },
         backgroundColor = MyColors().primary.value,
@@ -118,11 +133,13 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean> , navController: N
                             isExpanded = false
                             showDialog.value = false
 
-                            navController.navigate(when(text){
-                                "Favorites" -> WeatherScreensName.FavoritesScreen.name
-                                "Settings" -> WeatherScreensName.SettingsScreen.name
-                                else -> WeatherScreensName.AboutScreen.name
-                            })
+                            navController.navigate(
+                                when (text) {
+                                    "Favorites" -> WeatherScreensName.FavoritesScreen.name
+                                    "Settings" -> WeatherScreensName.SettingsScreen.name
+                                    else -> WeatherScreensName.AboutScreen.name
+                                }
+                            )
 
                         }) {
                         Icon(
