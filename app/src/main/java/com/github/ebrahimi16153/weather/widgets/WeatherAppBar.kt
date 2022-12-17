@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.github.ebrahimi16153.weather.model.City
+import com.github.ebrahimi16153.weather.model.Favorites
 import com.github.ebrahimi16153.weather.navigation.WeatherScreensName
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
 import com.github.ebrahimi16153.weather.viewmodel.FavoriteViewModel
@@ -70,6 +72,7 @@ fun WeatherAppBar(
             }
 
         },
+        //navigation button
         navigationIcon = {
             if (icon != null) {
                 IconButton(onClick = { onNavigationClicked.invoke() }) {
@@ -79,9 +82,20 @@ fun WeatherAppBar(
                         tint = MyColors().onPrimary.value
                     )
                 }
+                //favorite Button
             } else if (isMainScreen) {
 
-                IconButton(onClick = { /*TODO*/ }) {
+
+                IconButton(onClick = {
+                    val dataList = title.split(",")
+
+                    // insert city from title to favorite list
+                    favoriteViewModel.insertFavorite(
+
+                        Favorites(city = dataList[0] , //city
+                            country = dataList[1] )   // country
+                    )
+                }) {
                     Icon(
                         imageVector = Icons.Default.FavoriteBorder,
                         contentDescription = "fav icon",

@@ -27,10 +27,10 @@ class FavoriteViewModel @Inject constructor(private val weatherDbRepository: Wea
 
             weatherDbRepository.getFavorites().distinctUntilChanged().collect() { listOfFavs ->
                 if (listOfFavs.isEmpty()) {
-                    Log.e("TAG", "EMPTY FAV")
+                    Log.d("TAG", "EMPTY FAV")
                 } else {
                     _favList.value = listOfFavs
-                    Log.e("FAV", "${favList.value}")
+                    Log.d("FAV", "${favList.value}")
                 }
             }
         }
