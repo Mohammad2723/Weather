@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.github.ebrahimi16153.weather.model.City
 import com.github.ebrahimi16153.weather.model.Favorites
 import com.github.ebrahimi16153.weather.navigation.WeatherScreensName
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
@@ -32,7 +31,6 @@ fun WeatherAppBar(
     favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onSearchClicked: () -> Unit,
     navController:NavController,
-
     onNavigationClicked: () -> Unit = { navController.popBackStack()}
 ) {
 
@@ -86,22 +84,35 @@ fun WeatherAppBar(
             } else if (isMainScreen) {
 
 
-                IconButton(onClick = {
-                    val dataList = title.split(",")
+                // check the city already is favorite or not
+                val isAlreadyFavList =
+                    favoriteViewModel.favList.collectAsState().value.filter { item ->
+                        (item.city == title.split(",")[0])
+                    }
 
-                    // insert city from title to favorite list
-                    favoriteViewModel.insertFavorite(
 
-                        Favorites(city = dataList[0] , //city
-                            country = dataList[1] )   // country
-                    )
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "fav icon",
-                        tint = MyColors().onPrimary.value
-                    )
+                if (isAlreadyFavList.isEmpty()){
+
+                    IconButton(onClick = {
+                        val dataList = title.split(",")
+
+                        // insert city from title to favorite list
+                        favoriteViewModel.insertFavorite(
+
+                            Favorites(
+                                city = dataList[0], //city
+                                country = dataList[1]
+                            )   // country
+                        )
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = "fav icon",
+                            tint = MyColors().onPrimary.value
+                        )
+                    }
                 }
+
 
 
             }

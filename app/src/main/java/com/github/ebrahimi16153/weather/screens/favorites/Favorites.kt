@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,26 +23,32 @@ import com.github.ebrahimi16153.weather.model.Favorites
 import com.github.ebrahimi16153.weather.navigation.WeatherScreensName
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
 import com.github.ebrahimi16153.weather.viewmodel.FavoriteViewModel
+import com.github.ebrahimi16153.weather.widgets.EmptyList
+import com.github.ebrahimi16153.weather.widgets.RowOfFavorite
 import com.github.ebrahimi16153.weather.widgets.WeatherAppBar
 
 @Composable
-fun FavoritesScreen(navController: NavHostController) {
-    AboutScaffold(navController = navController)
+fun FavoritesScreen(
+    navController: NavHostController,
+    favoritesViewModel: FavoriteViewModel = hiltViewModel()
+) {
+    FavoritesScaffold(navController = navController, favoritesViewModel)
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AboutScaffold(navController: NavHostController) {
+fun FavoritesScaffold(navController: NavHostController, favoriteViewModel: FavoriteViewModel) {
 
     Scaffold(topBar = {
         WeatherAppBar(
-            onSearchClicked = { navController.navigate(WeatherScreensName.SearchScreen.name) },
+            onSearchClicked = {},
             title = "Favorites",
+            isMainScreen = false,
             icon = Icons.Default.ArrowBack,
             navController = navController
         )
     }) {
-        MainContent(navController = navController)
+        MainContent(navController = navController, favoritesViewModel = favoriteViewModel)
     }
 
 }
@@ -49,66 +56,36 @@ fun AboutScaffold(navController: NavHostController) {
 
 //@Preview
 @Composable
-fun MainContent(navController: NavController) {
-    val favoriteViewModel: FavoriteViewModel = hiltViewModel()
+fun MainContent(navController: NavController, favoritesViewModel: FavoriteViewModel) {
+
+    /****** if you want update list after delete a item must use from below code *****/
+    val list = favoritesViewModel.favList.collectAsState().value
+
     Surface(modifier = Modifier.fillMaxSize(), color = MyColors().background.value) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
 
-            LazyColumn {
-                items(items = favoriteViewModel.favList.value) { item ->
-                    RowOfFavorite(
-                        item = item,
-                        onDeleteIconClick = { favorites ->
-                            favoriteViewModel.deleteFavorite(favorites)
-                        }) { city ->
-                        navController.popBackStack()
-                        navController.navigate(WeatherScreensName.MainScreen.name + "/$city")
+
+            if (list.isNotEmpty()) {
+
+                LazyColumn {
+                    items(items = list) { item ->
+
+                        RowOfFavorite(
+                            item = item,
+                            navController = navController,
+                            favoritesViewModel = favoritesViewModel
+                        )
+
                     }
                 }
+            } else {
+             EmptyList()
             }
 
         }
 
     }
-}
-
-@Composable
-fun RowOfFavorite(
-    item: Favorites,
-    onDeleteIconClick: (Favorites) -> Unit,
-    onRowClick: (String) -> Unit
-) {
-
-    Row(
-        modifier = Modifier
-            .clickable { onRowClick(item.city) }
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = item.city, color = MyColors().text.value, textAlign = TextAlign.Center)
-        Text(text = item.country, color = MyColors().text.value, textAlign = TextAlign.Center)
-        IconButton(onClick = {
-            onDeleteIconClick(
-                Favorites(
-                    city = item.city,
-                    country = item.country
-                )
-            )
-        }) {
-
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "delete icon",
-                tint = Color.Red.copy(alpha = 0.5f)
-            )
-
-        }
-    }
-
-
 }
