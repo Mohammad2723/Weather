@@ -1,7 +1,11 @@
 package com.github.ebrahimi16153.weather.widgets
 
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -30,18 +34,24 @@ fun RowOfFavorite(
 
     Row(
         modifier = Modifier
+            .padding(vertical = 5.dp)
+            .border(width = 1.dp, shape = RoundedCornerShape(12.dp), color = MyColors().text.value)
             .clickable {
-
                 navController.popBackStack()
                 navController.navigate(WeatherScreensName.MainScreen.name + "/${item.city}")
 
             }
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = item.city, color = MyColors().text.value, textAlign = TextAlign.Center)
+
+        Text(
+            text = item.city,
+            color = MyColors().text.value,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(start = 8.dp)
+        )
         Text(text = item.country, color = MyColors().text.value, textAlign = TextAlign.Center)
         IconButton(onClick = {
             // delete favorite
@@ -67,11 +77,10 @@ fun EmptyList() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
         Text(text = "Favorite list is empty", color = MyColors().text.value)
 
     }
 
 
 }
+

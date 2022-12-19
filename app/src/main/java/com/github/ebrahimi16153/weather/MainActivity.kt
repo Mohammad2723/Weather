@@ -1,6 +1,7 @@
 package com.github.ebrahimi16153.weather
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,13 @@ class MainActivity : ComponentActivity() {
             WeatherApp()
         }
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("onResume","onResume")
+    }
+
 }
 @ExperimentalComposeUiApi
 @Composable

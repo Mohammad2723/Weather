@@ -1,12 +1,8 @@
 package com.github.ebrahimi16153.weather.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.github.ebrahimi16153.weather.model.Favorites
+import com.github.ebrahimi16153.weather.model.UnitWeather
 import kotlinx.coroutines.flow.Flow
 
 
@@ -29,5 +25,26 @@ interface WeatherDao {
 
     @Delete
     suspend fun deleteFavorite(favorites: Favorites)
+
+
+    ///////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    //Unit Weather
+    @Query("SELECT * FROM unit_tbl")
+    fun getUnit(): Flow<List<UnitWeather>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUnit(unitWeather: UnitWeather)
+
+    @Update
+    suspend fun updateUnit(unitWeather: UnitWeather)
+
+
+    @Query("DELETE FROM unit_tbl")
+    suspend fun deleteAllUnit()
+
+
+    @Delete
+    suspend fun deleteUnit(unitWeather: UnitWeather)
 
 }

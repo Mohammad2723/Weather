@@ -70,7 +70,7 @@ fun MainContent(navController: NavController, favoritesViewModel: FavoriteViewMo
 
             if (list.isNotEmpty()) {
 
-                LazyColumn {
+                LazyColumn(modifier = Modifier.padding(top = 10.dp, start = 8.dp, end = 8.dp)) {
                     items(items = list) { item ->
 
                         RowOfFavorite(

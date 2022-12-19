@@ -1,15 +1,21 @@
 package com.github.ebrahimi16153.weather.widgets
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -29,7 +35,7 @@ fun WeatherAppBar(
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
     favoriteViewModel: FavoriteViewModel = hiltViewModel(),
-    onSearchClicked: () -> Unit,
+    onSearchClicked: () -> Unit = {},
     navController:NavController,
     onNavigationClicked: () -> Unit = { navController.popBackStack()}
 ) {
@@ -90,12 +96,15 @@ fun WeatherAppBar(
                         (item.city == title.split(",")[0])
                     }
 
+                //context -> it cant define in @Composable function
 
-                if (isAlreadyFavList.isEmpty()){
+                // below code is define in onClick of IconButton and
+                // oClick function isn't @Composable function
+                val context = LocalContext.current
 
-                    IconButton(onClick = {
-                        val dataList = title.split(",")
-
+                IconButton(onClick = {
+                    val dataList = title.split(",")
+                    if (isAlreadyFavList.isEmpty()) {
                         // insert city from title to favorite list
                         favoriteViewModel.insertFavorite(
 
@@ -104,13 +113,37 @@ fun WeatherAppBar(
                                 country = dataList[1]
                             )   // country
                         )
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.FavoriteBorder,
-                            contentDescription = "fav icon",
-                            tint = MyColors().onPrimary.value
+                        // toast massage for added city to favorites list
+                        Toast.makeText(
+                            context,
+                            "${dataList[0]} Added to Favorites",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    } else {
+                        favoriteViewModel.deleteFavorite(
+                            Favorites(
+                                city = dataList[0], //city
+                                country = dataList[1]
+                            )
                         )
                     }
+
+
+                }) {
+                    Icon(
+                        imageVector = if (isAlreadyFavList.isEmpty()) {
+                            Icons.Rounded.FavoriteBorder
+                        } else {
+                            Icons.Rounded.Favorite
+                        },
+                        contentDescription = "fav icon",
+                        tint = if (isAlreadyFavList.isEmpty()) {
+                            MyColors().onPrimary.value
+                        } else {
+                            Color.Red
+                        }
+                    )
                 }
 
 
@@ -157,7 +190,6 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean> , navController: N
                         .clickable {
                             isExpanded = false
                             showDialog.value = false
-
                             navController.navigate(
                                 when (text) {
                                     "Favorites" -> WeatherScreensName.FavoritesScreen.name
@@ -179,15 +211,17 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean> , navController: N
                         Text(text = " $text", fontWeight = FontWeight.Bold)
 
                     }
-
                 }
             }
-
-
         }
-
     }
+}
 
 
+@Composable
+fun ToastMessage(context: Context, showIt:Boolean){
+    if (showIt){
+        Toast.makeText(context , "Added To Favorites list",Toast.LENGTH_SHORT).show()
+    }
 }
 
