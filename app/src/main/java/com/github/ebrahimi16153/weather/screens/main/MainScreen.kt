@@ -6,8 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -24,7 +23,10 @@ import com.github.ebrahimi16153.weather.navigation.WeatherScreensName
 import com.github.ebrahimi16153.weather.ui.theme.MyColors
 import com.github.ebrahimi16153.weather.util.formatDate
 import com.github.ebrahimi16153.weather.viewmodel.MainViewModel
+import com.github.ebrahimi16153.weather.viewmodel.SettingsViewModel
 import com.github.ebrahimi16153.weather.widgets.*
+import kotlinx.coroutines.flow.toCollection
+import kotlinx.coroutines.flow.toList
 
 
 @ExperimentalComposeUiApi
@@ -32,6 +34,7 @@ import com.github.ebrahimi16153.weather.widgets.*
 fun MainScreen(
     navController: NavHostController,
     viewModel: MainViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
     city: String?
 ) {
     Column(
@@ -41,26 +44,38 @@ fun MainScreen(
     ) {
 
 
-//        Log.d("city", city!!)
-
-        val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
-            initialValue = DataOrException(isLoading = true)
-        ) {
-            value = viewModel.getWeatherData(city = city?:"London")
-        }.value
-
-        if (weatherData.isLoading == true) {
-            CircularProgressIndicator(color = MyColors().text.value)
-
-        } else if (weatherData.data != null) {
-
-            MainScaffold(weather = weatherData.data!!, navController = navController)
-//            HumidityWindPressureRow(weather = weatherData.data!!)
-        } else {
-            Text(text = "We can't find the city")
-            SearchContent(navController = navController)
-
+        val unitFromDB = settingsViewModel.unitList.collectAsState().value
+        val unitDef by remember {
+            mutableStateOf("imperial")
         }
+        val isImperial by remember {
+            mutableStateOf(false)
+        }
+        if (unitFromDB.isNotEmpty()){
+           val  unit = unitFromDB[0].unit
+            val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
+                initialValue = DataOrException(isLoading = true)
+            ) {
+                value = viewModel.getWeatherData(city = city?:"London",unit = unit)
+            }.value
+
+            if (weatherData.isLoading == true) {
+                CircularProgressIndicator(color = MyColors().text.value)
+
+            } else if (weatherData.data != null) {
+
+                MainScaffold(weather = weatherData.data!!, navController = navController)
+//            HumidityWindPressureRow(weather = weatherData.data!!)
+            } else {
+                Text(text = "We can't find the city")
+                SearchContent(navController = navController)
+
+            }
+        }
+
+        Log.e("unit", settingsViewModel.unitList.collectAsState().value.size.toString())
+
+
 
 
     }
