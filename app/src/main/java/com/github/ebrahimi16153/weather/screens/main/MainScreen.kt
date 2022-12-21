@@ -25,8 +25,6 @@ import com.github.ebrahimi16153.weather.util.formatDate
 import com.github.ebrahimi16153.weather.viewmodel.MainViewModel
 import com.github.ebrahimi16153.weather.viewmodel.SettingsViewModel
 import com.github.ebrahimi16153.weather.widgets.*
-import kotlinx.coroutines.flow.toCollection
-import kotlinx.coroutines.flow.toList
 
 
 @ExperimentalComposeUiApi
@@ -45,14 +43,15 @@ fun MainScreen(
 
 
         val unitFromDB = settingsViewModel.unitList.collectAsState().value
-        val unitDef by remember {
-            mutableStateOf("imperial")
-        }
-        val isImperial by remember {
+//        val unitDef by remember {
+//            mutableStateOf("metric")
+//        }
+        var isMetric by remember {
             mutableStateOf(false)
         }
         if (unitFromDB.isNotEmpty()){
            val  unit = unitFromDB[0].unit
+            isMetric = unit == "metric"
             val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
                 initialValue = DataOrException(isLoading = true)
             ) {
@@ -64,7 +63,7 @@ fun MainScreen(
 
             } else if (weatherData.data != null) {
 
-                MainScaffold(weather = weatherData.data!!, navController = navController)
+                MainScaffold(weather = weatherData.data!!, navController = navController , isMetric = isMetric)
 //            HumidityWindPressureRow(weather = weatherData.data!!)
             } else {
                 Text(text = "We can't find the city")
@@ -84,7 +83,7 @@ fun MainScreen(
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScaffold(weather:Weather ,navController: NavController) {
+fun MainScaffold(weather: Weather, navController: NavController, isMetric: Boolean) {
 
     // appBar
     Scaffold(topBar = {
@@ -100,14 +99,14 @@ fun MainScaffold(weather:Weather ,navController: NavController) {
 
 
         // mainContent
-        MainContent(weather = weather)
+        MainContent(weather = weather,isMetric = isMetric)
     }
 
 
 }
 
 @Composable
-fun MainContent(weather: Weather) {
+fun MainContent(weather: Weather, isMetric: Boolean) {
     // icon Url
     val iconUrl =
         "https://openweathermap.org/img/wn/${weather.list?.get(0)?.weather?.get(0)?.icon}.png"
@@ -172,7 +171,7 @@ fun MainContent(weather: Weather) {
         }
         //end circle Content
 
-        HumidityWindPressureRow(weather = weather)
+        HumidityWindPressureRow(weather = weather ,isMetric =isMetric)
         DivideLine()
         SunRiseSunSet(weather = weather)
         DivideLine()

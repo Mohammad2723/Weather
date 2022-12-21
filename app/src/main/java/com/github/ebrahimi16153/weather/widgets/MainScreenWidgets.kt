@@ -35,7 +35,7 @@ fun WeatherIcon(url: String) {
 }
 
 @Composable
-fun HumidityWindPressureRow(weather: Weather) {
+fun HumidityWindPressureRow(weather: Weather, isMetric: Boolean) {
     Row(
         modifier = Modifier
             .padding(12.dp)
@@ -89,7 +89,7 @@ fun HumidityWindPressureRow(weather: Weather) {
             )
             Spacer(modifier = Modifier.width(2.dp))
             Text(
-                text = weather.list?.get(0)?.speed.toString() + " k/h",
+                text = weather.list?.get(0)?.speed.toString() + if (isMetric) " m/s" else " mph",
                 style = MaterialTheme.typography.caption
             )
         }
